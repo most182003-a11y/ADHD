@@ -1,9 +1,10 @@
 import { useState } from "react";
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { 
   LayoutDashboard, Users, Gamepad2, FileText, Settings, 
-  Brain, ChevronLeft, ChevronRight, Bell, Moon, Sun, Menu, X, UserPlus
+  Brain, ChevronLeft, ChevronRight, Bell, Moon, Sun, Menu, X, UserPlus, LogOut
 } from "lucide-react";
+import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
@@ -14,13 +15,16 @@ interface DashboardLayoutProps {
   onToggleDark: () => void;
 }
 
-const navItems = [
-  { path: "/", label: "Overview", icon: LayoutDashboard },
-  { path: "/child-analytics", label: "Child Analytics", icon: Users },
-  { path: "/add-child", label: "Add Patient", icon: UserPlus },
-  { path: "/game-analytics", label: "Game Analytics", icon: Gamepad2 },
-  { path: "/reports", label: "Reports", icon: FileText },
-  { path: "/settings", label: "Settings", icon: Settings },
+const allNavItems = [
+  { path: "/admin", label: "Overview", icon: LayoutDashboard, roles: ['Admin'] },
+  { path: "/doctor", label: "Doctor Dashboard", icon: LayoutDashboard, roles: ['Doctor'] },
+  { path: "/parent", label: "Parent Dashboard", icon: LayoutDashboard, roles: ['Parent'] },
+  { path: "/games", label: "Games Catalog", icon: Gamepad2, roles: ['Admin', 'Doctor'] },
+  { path: "/child-analytics", label: "Child Analytics", icon: Users, roles: ['Admin', 'Doctor'] },
+  { path: "/add-child", label: "Add Patient", icon: UserPlus, roles: ['Admin', 'Doctor'] },
+  { path: "/game-analytics", label: "Game Analytics", icon: Gamepad2, roles: ['Admin'] },
+  { path: "/reports", label: "Reports", icon: FileText, roles: ['Admin', 'Doctor'] },
+  { path: "/settings", label: "Settings", icon: Settings, roles: ['Admin', 'Doctor', 'Parent'] },
 ];
 
 
@@ -29,7 +33,16 @@ export default function DashboardLayout({ children, darkMode, onToggleDark }: Da
   const [mobileOpen, setMobileOpen] = useState(false);
   const location = useLocation();
 
+  const { role, logout } = useAuth();
+  const navigate = useNavigate();
+
+  const navItems = allNavItems.filter(item => item.roles.includes(role || ''));
   const currentNav = navItems.find(n => n.path === location.pathname);
+
+  const handleLogout = () => {
+    logout();
+    navigate('/login');
+  };
 
   const SidebarContent = () => (
     <>
@@ -74,14 +87,17 @@ export default function DashboardLayout({ children, darkMode, onToggleDark }: Da
       <div className={cn("px-2 py-4 border-t border-sidebar-border", collapsed && "flex flex-col items-center")}>
         <div className={cn("flex items-center gap-2 px-3 py-2 rounded-lg bg-sidebar-accent/50", collapsed && "flex-col gap-1 px-2")}>
           <div className="w-7 h-7 rounded-full gradient-primary flex items-center justify-center flex-shrink-0">
-            <span className="text-xs font-bold text-primary-foreground">SK</span>
+            <span className="text-xs font-bold text-primary-foreground">{role ? role.charAt(0) : 'U'}</span>
           </div>
           {!collapsed && (
             <div className="flex-1 min-w-0">
-              <p className="text-xs font-semibold text-sidebar-accent-foreground truncate">Dr. Sara Hassan</p>
-              <p className="text-xs text-sidebar-foreground/60">Admin</p>
+              <p className="text-xs font-semibold text-sidebar-accent-foreground truncate">Current User</p>
+              <p className="text-xs text-sidebar-foreground/60">{role}</p>
             </div>
           )}
+          <Button variant="ghost" size="icon" className="w-6 h-6 text-sidebar-foreground hover:text-danger" onClick={handleLogout}>
+             <LogOut size={14} />
+          </Button>
         </div>
       </div>
     </>

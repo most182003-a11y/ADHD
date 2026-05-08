@@ -2,9 +2,22 @@ node_modules/
 dist/
 build/
 .env
+
+# Python
 __pycache__/
 *.pyc
+
+# OS
 .DS_Store
+
+# Editors
 .vscode/
 .idea/
+
+# Logs
 *.log
+
+# Visual Studio
+.vs/
+bin/
+obj/
