@@ -10,6 +10,7 @@ namespace ADHD.Infrastructure.Data
 
         public DbSet<Child> Children { get; set; }
         public DbSet<Session> Sessions { get; set; }
+        public DbSet<Game> Games { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -33,6 +34,14 @@ namespace ADHD.Infrastructure.Data
 
                 // Map summary fields if they are different in DB
                 // Based on frontend, they seem to be flat in the table
+            });
+
+            modelBuilder.Entity<Game>(entity =>
+            {
+                entity.ToTable("games");
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Name).IsRequired();
+                entity.Property(e => e.Category).IsRequired();
             });
         }
 

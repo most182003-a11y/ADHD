@@ -10,7 +10,7 @@ namespace ADHD.Application.Handlers.AuthHandlers
 {
     public class AuthCommandHandler : 
         IRequestHandler<RegisterUserCommand, Response<string>>,
-        IRequestHandler<LoginCommand, Response<string>>
+        IRequestHandler<LoginCommand, Response<ADHD.Application.DTOs.LoginResponseDto>>
     {
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
@@ -41,27 +41,41 @@ namespace ADHD.Application.Handlers.AuthHandlers
                 };
             }
 
+            if (!string.IsNullOrEmpty(request.Role))
+            {
+                await _userManager.AddToRoleAsync(user, request.Role);
+            }
+
             return _responseHandler.Success("User registered successfully");
         }
 
-        public async Task<Response<string>> Handle(LoginCommand request, CancellationToken cancellationToken)
+        public async Task<Response<ADHD.Application.DTOs.LoginResponseDto>> Handle(LoginCommand request, CancellationToken cancellationToken)
         {
             var user = await _userManager.FindByEmailAsync(request.Email);
             if (user == null)
             {
-                return _responseHandler.BadRequest<string>("Invalid email or password");
+                return _responseHandler.BadRequest<ADHD.Application.DTOs.LoginResponseDto>("Invalid email or password");
             }
 
             var result = await _signInManager.PasswordSignInAsync(user, request.Password, false, false);
 
             if (!result.Succeeded)
             {
-                return _responseHandler.BadRequest<string>("Invalid email or password");
+                return _responseHandler.BadRequest<ADHD.Application.DTOs.LoginResponseDto>("Invalid email or password");
             }
 
-            // For now, returning a simple success message. 
+            var roles = await _userManager.GetRolesAsync(user);
+            var role = roles.FirstOrDefault() ?? "Parent";
+
+            var responseDto = new ADHD.Application.DTOs.LoginResponseDto
+            {
+                Message = "Login successful",
+                Role = role
+            };
+
+            // For now, returning a simple success message with role. 
             // In a real scenario, you'd return a JWT token here.
-            return _responseHandler.Success("Login successful");
+            return _responseHandler.Success(responseDto);
         }
     }
 }
