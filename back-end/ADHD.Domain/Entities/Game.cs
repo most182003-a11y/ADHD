@@ -1,4 +1,4 @@
-using System;
+using System.Collections.Generic;
 
 namespace ADHD.Domain.Entities
 {
@@ -6,9 +6,11 @@ namespace ADHD.Domain.Entities
     {
         public string Name { get; set; } = string.Empty;
         
-        // e.g., "فرط الحركة" (Hyperactivity) or "قلة التركيز" (Inattention)
-        public string Category { get; set; } = string.Empty; 
+        public string GameCategoryId { get; set; } = string.Empty;
+        public GameCategory? Category { get; set; }
         
         public string? Description { get; set; }
+
+        public ICollection<Session> Sessions { get; set; } = new List<Session>();
     }
 }

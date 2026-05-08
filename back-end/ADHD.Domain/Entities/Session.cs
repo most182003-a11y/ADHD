@@ -11,7 +11,8 @@ namespace ADHD.Domain.Entities
         public DateTime StartTime { get; set; }
         public int DurationMinutes { get; set; }
         public string Therapist { get; set; } = string.Empty;
-        public string Game { get; set; } = string.Empty;
+        public string? GameId { get; set; }
+        public Game? Game { get; set; }
 
         // Summary Fields
         public int TotalTrials { get; set; }
