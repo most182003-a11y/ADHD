@@ -1,4 +1,5 @@
 using ADHD.Application.Responses;
+using ADHD.Domain.Enums;
 using MediatR;
 
 namespace ADHD.Application.Commands.ChildCommands
@@ -7,10 +8,11 @@ namespace ADHD.Application.Commands.ChildCommands
     {
         public string Name { get; set; } = string.Empty;
         public int Age { get; set; }
-        public string Gender { get; set; } = string.Empty;
-        public string DiagnosisSeverity { get; set; } = string.Empty;
-        public string Therapist { get; set; } = string.Empty;
-        public string Status { get; set; } = string.Empty;
+        public Gender Gender { get; set; }
+        public DiagnosisSeverity DiagnosisSeverity { get; set; }
+        public ChildStatus Status { get; set; } = ChildStatus.Stable;
         public string AvatarInitials { get; set; } = string.Empty;
+        public string? DoctorId { get; set; }
+        public string? ParentId { get; set; }
     }
 }

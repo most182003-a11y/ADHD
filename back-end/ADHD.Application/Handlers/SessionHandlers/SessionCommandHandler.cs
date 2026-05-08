@@ -24,22 +24,20 @@ namespace ADHD.Application.Handlers.SessionHandlers
             var session = new Session
             {
                 ChildId = request.ChildId,
-                SessionId = request.SessionId,
+                GameId = request.GameId,
                 StartTime = request.StartTime,
                 DurationMinutes = request.DurationMinutes,
-                Therapist = request.Therapist,
-                Game = request.Game,
+                DifficultyLevel = request.DifficultyLevel,
                 TotalTrials = request.TotalTrials,
                 SuccessRate = request.SuccessRate,
+                PlayerScore = request.PlayerScore,
                 ImpulsivityIndex = request.ImpulsivityIndex,
                 MotorControlScore = request.MotorControlScore,
+                FalseMoves = request.FalseMoves,
                 DistractionScore = request.DistractionScore,
                 AvgReactionTime = request.AvgReactionTime,
-                MaxConsecutiveSuccess = request.MaxConsecutiveSuccess,
-                FalseMoves = request.FalseMoves,
                 FalseStops = request.FalseStops,
-                RedPhaseErrors = request.RedPhaseErrors,
-                GreenPhaseErrors = request.GreenPhaseErrors
+                MaxConsecutiveSuccess = request.MaxConsecutiveSuccess
             };
 
             await _sessionRepository.AddAsync(session);
