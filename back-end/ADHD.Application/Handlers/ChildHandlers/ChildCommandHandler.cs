@@ -27,10 +27,11 @@ namespace ADHD.Application.Handlers.ChildHandlers
                 Age = request.Age,
                 Gender = request.Gender,
                 DiagnosisSeverity = request.DiagnosisSeverity,
-                Therapist = request.Therapist,
                 Status = request.Status,
                 AvatarInitials = request.AvatarInitials,
-                RegisteredDate = DateTime.UtcNow
+                RegisteredDate = DateTime.UtcNow,
+                DoctorId = request.DoctorId,
+                ParentId = request.ParentId
             };
 
             await _childRepository.AddAsync(child);
