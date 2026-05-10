@@ -21,6 +21,11 @@ namespace ADHD.Infrastructure.Data
         {
             base.OnModelCreating(modelBuilder);
 
+            modelBuilder.Entity<AppUser>().UseTptMappingStrategy();
+            modelBuilder.Entity<Parent>().ToTable("Parents");
+            modelBuilder.Entity<Doctor>().ToTable("Doctors");
+            modelBuilder.Entity<Admin>().ToTable("Admins");
+
             modelBuilder.Entity<Child>(entity =>
             {
                 entity.ToTable("children");
