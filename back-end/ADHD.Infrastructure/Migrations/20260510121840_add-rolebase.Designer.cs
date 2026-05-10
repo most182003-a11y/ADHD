@@ -4,6 +4,7 @@ using ADHD.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ADHD.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260510121840_add-rolebase")]
+    partial class addrolebase
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -33,6 +36,11 @@ namespace ADHD.Infrastructure.Migrations
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasMaxLength(8)
+                        .HasColumnType("nvarchar(8)");
 
                     b.Property<string>("Email")
                         .HasMaxLength(256)
@@ -101,7 +109,9 @@ namespace ADHD.Infrastructure.Migrations
 
                     b.ToTable("AspNetUsers", (string)null);
 
-                    b.UseTptMappingStrategy();
+                    b.HasDiscriminator<string>("Discriminator").HasValue("AppUser");
+
+                    b.UseTphMappingStrategy();
                 });
 
             modelBuilder.Entity("ADHD.Domain.Entities.Child", b =>
@@ -543,21 +553,21 @@ namespace ADHD.Infrastructure.Migrations
                 {
                     b.HasBaseType("ADHD.Domain.Entities.AppUser");
 
-                    b.ToTable("Admins", (string)null);
+                    b.HasDiscriminator().HasValue("Admin");
                 });
 
             modelBuilder.Entity("ADHD.Domain.Entities.Doctor", b =>
                 {
                     b.HasBaseType("ADHD.Domain.Entities.AppUser");
 
-                    b.ToTable("Doctors", (string)null);
+                    b.HasDiscriminator().HasValue("Doctor");
                 });
 
             modelBuilder.Entity("ADHD.Domain.Entities.Parent", b =>
                 {
                     b.HasBaseType("ADHD.Domain.Entities.AppUser");
 
-                    b.ToTable("Parents", (string)null);
+                    b.HasDiscriminator().HasValue("Parent");
                 });
 
             modelBuilder.Entity("ADHD.Domain.Entities.Child", b =>
@@ -671,33 +681,6 @@ namespace ADHD.Infrastructure.Migrations
                     b.HasOne("ADHD.Domain.Entities.AppUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("ADHD.Domain.Entities.Admin", b =>
-                {
-                    b.HasOne("ADHD.Domain.Entities.AppUser", null)
-                        .WithOne()
-                        .HasForeignKey("ADHD.Domain.Entities.Admin", "Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("ADHD.Domain.Entities.Doctor", b =>
-                {
-                    b.HasOne("ADHD.Domain.Entities.AppUser", null)
-                        .WithOne()
-                        .HasForeignKey("ADHD.Domain.Entities.Doctor", "Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("ADHD.Domain.Entities.Parent", b =>
-                {
-                    b.HasOne("ADHD.Domain.Entities.AppUser", null)
-                        .WithOne()
-                        .HasForeignKey("ADHD.Domain.Entities.Parent", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
