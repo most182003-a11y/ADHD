@@ -1,0 +1,8 @@
+opencv-python
+pygame
+numpy
+mediapipe
+python-dotenv
+supabase
+customtkinter
+pillow
