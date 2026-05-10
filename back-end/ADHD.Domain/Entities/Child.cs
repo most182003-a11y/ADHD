@@ -14,9 +14,11 @@ namespace ADHD.Domain.Entities
         public ChildStatus Status { get; set; } = ChildStatus.Stable;
         public string AvatarInitials { get; set; } = string.Empty;
 
-        // FK to Doctor and Parent (added via SQL migration)
+        // FK to Doctor and Parent
         public string? DoctorId { get; set; }
+        public Doctor? Doctor { get; set; }
         public string? ParentId { get; set; }
+        public Parent? Parent { get; set; }
 
         public ICollection<Session> Sessions { get; set; } = new List<Session>();
         public ICollection<ChildProgressSnapshot> ProgressSnapshots { get; set; } = new List<ChildProgressSnapshot>();
