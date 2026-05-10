@@ -45,7 +45,7 @@ class GreenLightGame:
         self.round_number = 0
         self.state = "PLAYING"
         
-        # ADHD Performance Metrics
+        # ADHD Performance Metricsddd
         self.trials = []
         self.reaction_times = []
         self.freeze_durations = []

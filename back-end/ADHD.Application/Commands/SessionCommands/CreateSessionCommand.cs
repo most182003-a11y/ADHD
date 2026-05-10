@@ -7,7 +7,7 @@ namespace ADHD.Application.Commands.SessionCommands
 {
     public class CreateSessionCommand : IRequest<Response<string>>
     {
-        public string ChildId { get; set; } = string.Empty;
+        public string ChildId { get; set; } = string.Empty;  ///dgsdg
         public string? GameId { get; set; }
         public DateTime StartTime { get; set; }
         public int DurationMinutes { get; set; }
