@@ -9,6 +9,9 @@ namespace ADHD.Infrastructure.Data
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
         public DbSet<Child> Children { get; set; }
+        public DbSet<Parent> Parents { get; set; }
+        public DbSet<Doctor> Doctors { get; set; }
+        public DbSet<Admin> Admins { get; set; }
         public DbSet<Session> Sessions { get; set; }
         public DbSet<Game> Games { get; set; }
         public DbSet<GameCategory> GameCategories { get; set; }
@@ -26,6 +29,16 @@ namespace ADHD.Infrastructure.Data
                 entity.Property(e => e.Gender).HasConversion<string>();
                 entity.Property(e => e.DiagnosisSeverity).HasConversion<string>();
                 entity.Property(e => e.Status).HasConversion<string>();
+
+                entity.HasOne(e => e.Parent)
+                    .WithMany(p => p.Children)
+                    .HasForeignKey(e => e.ParentId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasOne(e => e.Doctor)
+                    .WithMany(d => d.Patients)
+                    .HasForeignKey(e => e.DoctorId)
+                    .OnDelete(DeleteBehavior.Restrict);
             });
 
             modelBuilder.Entity<Session>(entity =>
